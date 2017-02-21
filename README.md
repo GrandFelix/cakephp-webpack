@@ -64,5 +64,13 @@ Run next shell command:
 
 This command will cerate webpack.config.json in app root dir so webpack caa use it!
 
+In your view files use HtmlHelper to include generate files as you need
+
 
 More instructions will come..
+
+## TODO
+
+- [ ] Add Component and Helper to automatically load generate files for plugin
+- [ ] Write tests
+
