@@ -1,5 +1,5 @@
 <?php
-namespace Webpack\Shell\Task;
+namespace GrandFelix\Webpack\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -82,7 +82,7 @@ class ReloadTask extends Shell
      * @return array|null
      * @throws \Exception
      */
-    protected function findResourceConfig(string $path): ?array
+    protected function findResourceConfig($path)
     {
         $file = new File($path . DS . 'config' . DS . 'webpack.config.php');
 
@@ -108,15 +108,15 @@ class ReloadTask extends Shell
      * @return array
      * @throws \Exception if resource option is not set in resource config
      */
-    protected function getResourceFiles(string $plugin, array $resourceConfig, string $aliasKey): array
+    protected function getResourceFiles($plugin, array $resourceConfig, $aliasKey)
     {
         $return = [];
         $startPath = $this->getStartPath($plugin);
 
         if (isset($resourceConfig['resources'])) {
-            $pathToResources = (string)$resourceConfig['aliasPath'] ?? 'webroot';
-            $mainJs = $resourceConfig['mainJs'] ?? false;
-            $mainCss = $resourceConfig['mainCss'] ?? false;
+            $pathToResources = (string)$resourceConfig['aliasPath'] ?: 'webroot';
+            $mainJs = $resourceConfig['mainJs'] ?: false;
+            $mainCss = $resourceConfig['mainCss'] ?: false;
 
             foreach ($resourceConfig['resources'] as $resource) {
                 $folderPath = $startPath . DS . $pathToResources . DS . $resource;
@@ -146,7 +146,8 @@ class ReloadTask extends Shell
                     // it looks like this is folder! Get all files from this folder, recursive!
                     $dir = new Folder($folderPath);
                     if ($dir->path !== null) {
-                        $filesInPath = $dir->findRecursive('.*\.(js|jsx|scss|css)');
+                        $filesInPath =
+                            $dir->findRecursive('.*\.(' . implode('|', Configure::read('Webpack.resources.fileExtensionsToSearch')) . ')');
                         if (isset($filesInPath)) {
                             foreach ($filesInPath as $file) {
                                 // check if isset mainJs or mainCss and skip it on true and add it to main files
@@ -187,7 +188,7 @@ class ReloadTask extends Shell
      * @return string
      * @throws \Exception if folder does not exists or if aliasPath is not set in resource config
      */
-    private function getAliasPath(string $plugin, array $resourceConfig): string
+    private function getAliasPath($plugin, array $resourceConfig)
     {
         $startPath = $this->getStartPath($plugin);
 
@@ -218,7 +219,7 @@ class ReloadTask extends Shell
      * @param string $extension extension to use. .js and .scss
      * @return File|mixed
      */
-    private function checkIfIsMainFile($mainOption, string $plugin, array $resourceConfig, string $aliasKey, $extension = '.js')
+    private function checkIfIsMainFile($mainOption, $plugin, array $resourceConfig, $aliasKey, $extension = '.js')
     {
         $key = $plugin . $aliasKey;
         if (isset($this->mainFileHandlers[$key])) {
@@ -249,7 +250,7 @@ class ReloadTask extends Shell
      * @param string $plugin if empty than main app path is used elese plugin path
      * @return string Return start path
      */
-    private function getStartPath(string $plugin): string
+    private function getStartPath($plugin)
     {
         if (!empty($plugin)) {
             $startPath = $pluginPath = Plugin::path($plugin) . DS;
@@ -269,7 +270,7 @@ class ReloadTask extends Shell
      * @param \Cake\Filesystem\File $file file resource
      * @return void
      */
-    private function setMainFile(string $plugin, string $aliasKey, File $file)
+    private function setMainFile($plugin, $aliasKey, File $file)
     {
         $key = $this->getResourceKey($plugin, $aliasKey) . '-main';
 
@@ -282,9 +283,9 @@ class ReloadTask extends Shell
      * @param string $path path to sanitize
      * @return string sanitized path
      */
-    private function removeMultipleSlashesFromPath(string $path): string
+    private function removeMultipleSlashesFromPath($path)
     {
-        return preg_replace('~/+~', '/', $path);
+        return preg_replace('~/+~', DS, $path);
     }
 
     /**
@@ -306,7 +307,7 @@ class ReloadTask extends Shell
      * @param string $aliasKey alias key from resource config
      * @return string
      */
-    private function getResourceKey(string $plugin, string $aliasKey): string
+    private function getResourceKey($plugin, $aliasKey)
     {
         return strtolower($plugin) . '-' . Inflector::dasherize($aliasKey);
     }
@@ -318,7 +319,7 @@ class ReloadTask extends Shell
      * @param string $aliasKey alias key from resource config
      * @return string
      */
-    private function getAliasKey(string $plugin, string $aliasKey): string
+    private function getAliasKey($plugin, $aliasKey)
     {
         return strtolower($plugin) . Inflector::camelize($aliasKey);
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Webpack\Shell\Task;
+namespace GrandFelix\Webpack\Shell\Task;
 
 use Cake\Console\Shell;
 
