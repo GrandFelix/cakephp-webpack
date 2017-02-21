@@ -33,7 +33,7 @@ npm install
 
 ## Usage
 
-In each your plugin conf folder add webpack.config.php with next options:
+In each your plugin conf folder (where you want to use this) create webpack.config.php with next options:
 
 ```php
 return [
@@ -55,6 +55,14 @@ return [
 ```
 
 alias key is used to name file for compilation. In this ^^ example webpack will for js resource create concatenated file in main app webroot, like: APP/webroot/js/plugin-name-js.js and for styles will create APP/webroot/css/plugin-name-styles.scss
+
+Run next shell command:
+
+```
+./bin/cake webpack reload
+```
+
+This command will cerate webpack.config.json in app root dir so webpack caa use it!
 
 
 More instructions will come..
