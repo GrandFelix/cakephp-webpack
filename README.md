@@ -42,7 +42,9 @@ return [
     'resources' => [ // all paths here are relative to aliasPath
       'path/to/somefile.js',
       '/', // this will take all files from aliasPath
-    ]
+    ],
+    'useMainJs' => true, // you can specify own filename
+    'useMainCss' => true // you can specify own filename
   ],
   'styles' => [
     'aliasPath' => 'webroot/styles' // relative to plugin or main app path
@@ -53,8 +55,15 @@ return [
   ]
 ];
 ```
+### Alias key
+#### compile time
+Is used to name file for compilation. In this ^^ example webpack will for js resource create concatenated file in main app webroot, like: APP/webroot/js/plugin-name-js.js and for styles will create APP/webroot/css/plugin-name-styles.scss
 
-alias key is used to name file for compilation. In this ^^ example webpack will for js resource create concatenated file in main app webroot, like: APP/webroot/js/plugin-name-js.js and for styles will create APP/webroot/css/plugin-name-styles.scss
+#### Importing requring files
+Alias key can also be used for importing/requring files. Alias for importing is like pluginNameAliasKey so you can use in js like impor something from 'pluginNameAliasKey/path_to/some_file' instead of using full paths which is painful
+
+#### Starting point files mainJs mainCss
+useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.extension. If you specify your custom name then this cusotm name will e used. File will be removed from resources array and added as own entry point. It's like index.js...
 
 Run next shell command:
 
@@ -71,6 +80,6 @@ More instructions will come..
 
 ## TODO
 
-- [ ] Add Component and Helper to automatically load generate files for plugin
+- [ ] Add Component and Helper to automatically load generated files for plugin
 - [ ] Write tests
 
