@@ -80,9 +80,9 @@ Alias key can also be used for importing/requring files. Alias for importing is 
 import something from 'pluginNameAliasKey/path_to/some_file'
 ``` 
 
-instead of using full paths which is painfull. Path are relative to aliasPath from resource config.
+instead of using full paths which is painfull. Paths are relative to aliasPath from resource config.
 
-#### Starting point files mainJs mainCss
+#### Alias key as starting point file when using mainJs or mainCss
 useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.extension. If you specify your custom name then this cusotm name will be used. File will be removed from resources array and added as own entry point. So in this file you can initialize reactjs app etc. 
 
 
