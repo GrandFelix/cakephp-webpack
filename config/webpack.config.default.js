@@ -1,5 +1,5 @@
 let path = require('path');
-let fs = require('fs');
+
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 let config = {};
