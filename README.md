@@ -59,6 +59,16 @@ return [
 
 You can add as many options as you want.
 
+Run next shell command:
+
+```
+./bin/cake webpack reload
+```
+
+This command will cerate webpack.config.json in app root dir so webpack caa use it!
+
+In your view files use HtmlHelper to include generated files as you need
+
 ### Alias key
 #### Alias key at compile time
 Is used to name file for compilation. In this ^^ example webpack will for js resource create concatenated file in main app webroot, like: APP/webroot/js/plugin-name-js.js and for styles will create APP/webroot/css/plugin-name-styles.scss
@@ -74,16 +84,6 @@ instead of using full paths which is painfull. Path are relative to aliasPath fr
 
 #### Starting point files mainJs mainCss
 useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.extension. If you specify your custom name then this cusotm name will be used. File will be removed from resources array and added as own entry point. So in this file you can initialize reactjs app etc. 
-
-Run next shell command:
-
-```
-./bin/cake webpack reload
-```
-
-This command will cerate webpack.config.json in app root dir so webpack caa use it!
-
-In your view files use HtmlHelper to include generated files as you need
 
 
 ## TODO
