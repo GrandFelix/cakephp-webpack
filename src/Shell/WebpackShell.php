@@ -13,8 +13,8 @@ class WebpackShell extends Shell
      * @var array
      */
     public $tasks = [
-        'Webpack.Reload',
-        'Webpack.Build',
+        'GrandFelix/Webpack.Reload',
+        'GrandFelix/Webpack.Build',
     ];
 
     /**

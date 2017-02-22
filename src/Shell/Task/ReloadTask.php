@@ -115,8 +115,8 @@ class ReloadTask extends Shell
 
         if (isset($resourceConfig['resources'])) {
             $pathToResources = (string)$resourceConfig['aliasPath'] ?: 'webroot';
-            $mainJs = $resourceConfig['mainJs'] ?: false;
-            $mainCss = $resourceConfig['mainCss'] ?: false;
+            $mainJs = isset($resourceConfig['mainJs']) ? $resourceConfig['mainJs'] : false;
+            $mainCss = isset($resourceConfig['mainCss']) ? $resourceConfig['mainCss'] : false;
 
             foreach ($resourceConfig['resources'] as $resource) {
                 $folderPath = $startPath . DS . $pathToResources . DS . $resource;
@@ -221,7 +221,7 @@ class ReloadTask extends Shell
      */
     private function checkIfIsMainFile($mainOption, $plugin, array $resourceConfig, $aliasKey, $extension = '.js')
     {
-        $key = $plugin . $aliasKey;
+        $key = $plugin . $aliasKey.$extension;
         if (isset($this->mainFileHandlers[$key])) {
             return $this->mainFileHandlers[$key];
         }
@@ -229,11 +229,12 @@ class ReloadTask extends Shell
         if ($mainOption === true || $mainOption != '') {
             if ($mainOption === true) {
                 // use pluginName.js to compare
-                $file = Inflector::dasherize($aliasKey . 'Main') . $extension;
+                $file = $this->getResourceKey($plugin, $aliasKey . 'Main') . $extension;
             } elseif ($mainOption != '') {
                 // user have set custom name
                 $file = $mainOption;
             }
+
             $mainFile = new File($this->getStartPath($plugin) . $resourceConfig['aliasPath'] . DS . $file);
 
             if ($mainFile->exists()) {
@@ -309,6 +310,10 @@ class ReloadTask extends Shell
      */
     private function getResourceKey($plugin, $aliasKey)
     {
+        if($plugin == '') {
+            $plugin = Configure::read('App.namespace');
+        }
+
         return strtolower($plugin) . '-' . Inflector::dasherize($aliasKey);
     }
 
@@ -321,6 +326,10 @@ class ReloadTask extends Shell
      */
     private function getAliasKey($plugin, $aliasKey)
     {
+        if($plugin == '') {
+            $plugin = Configure::read('App.namespace');
+        }
+
         return strtolower($plugin) . Inflector::camelize($aliasKey);
     }
 }
