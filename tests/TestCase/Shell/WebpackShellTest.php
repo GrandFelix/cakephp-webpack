@@ -1,8 +1,8 @@
 <?php
-namespace Webpack\Test\TestCase\Shell;
+namespace GrandFelix\Webpack\Test\TestCase\Shell;
 
 use Cake\TestSuite\TestCase;
-use Webpack\Shell\WebpackShell;
+use GrandFelix\Webpack\Shell\WebpackShell;
 
 /**
  * Webpack\Shell\WebpackShell Test Case
@@ -20,7 +20,7 @@ class WebpackShellTest extends TestCase
     /**
      * Test subject
      *
-     * @var \Webpack\Shell\WebpackShell
+     * @var \GrandFelix\Webpack\Shell\WebpackShell
      */
     public $Webpack;
 

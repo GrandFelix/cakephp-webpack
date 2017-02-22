@@ -1,7 +1,5 @@
-let path = require('path');
-
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
+let path = require('path');
 let config = {};
 
 try {

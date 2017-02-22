@@ -18,6 +18,11 @@ The recommended way to install composer packages is:
 composer require grandfelix/cakephp-webpack
 ```
 
+Load plugin
+```
+Plugin::load('GrandFelix/Webpack', ['bootstrap' => true, 'routes' => false]);
+```
+
 For now, copy webpack.config.default.js and webpack.packages.json from Webpack plugin to your main App folder (not ./src) and rename it to webpack.config.js and packages.json. If you already have packages.json file than add webpack dependencies to it...
 
 To install webpack go to app root folder and run next command:
@@ -65,7 +70,7 @@ Run next shell command:
 ./bin/cake webpack reload
 ```
 
-This command will cerate webpack.config.json in app root dir so webpack caa use it!
+This command will create webpack.config.json in app root dir so webpack caa use it!
 
 In your view files use HtmlHelper to include generated files as you need
 
@@ -73,17 +78,17 @@ In your view files use HtmlHelper to include generated files as you need
 #### Alias key at compile time
 Is used to name file for compilation. In this ^^ example webpack will for js resource create concatenated file in main app webroot, like: APP/webroot/js/plugin-name-js.js and for styles will create APP/webroot/css/plugin-name-styles.scss
 
-#### Alias key for importing/requring files
+#### Alias key for importing/requiring files
 Alias key can also be used for importing/requring files. Alias for importing is like pluginNameAliasKey so you can use in js like 
 
 ```js
 import something from 'pluginNameAliasKey/path_to/some_file'
 ``` 
 
-instead of using full paths which is painfull. Paths are relative to aliasPath from resource config.
+instead of using full paths which is painful. Paths are relative to aliasPath from resource config.
 
 #### Alias key as starting point file when using mainJs or mainCss
-useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.extension. If you specify your custom name then this cusotm name will be used. File will be removed from resources array and added as own entry point. So in this file you can initialize reactjs app etc. 
+useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.js and pluginname-aliiaskey-style-main.css. If you specify your custom name then this cusotm name will be used. File will be removed from resources array and added as own entry point. So in this file you can initialize reactjs app etc. 
 
 
 ## TODO

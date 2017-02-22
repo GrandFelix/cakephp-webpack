@@ -2,12 +2,12 @@
 namespace Webpack\Test\TestCase\Shell\Task;
 
 use Cake\TestSuite\TestCase;
-use Webpack\Shell\Task\ReloadResourcesTask;
+use GrandFelix\Webpack\Shell\Task\ReloadTask;
 
 /**
  * Webpack\Shell\Task\ReloadResourcesTask Test Case
  */
-class ReloadResourcesTaskTest extends TestCase
+class ReloadTaskTest extends TestCase
 {
 
     /**
@@ -20,9 +20,11 @@ class ReloadResourcesTaskTest extends TestCase
     /**
      * Test subject
      *
-     * @var \Webpack\Shell\Task\ReloadResourcesTask
+     * @var \GrandFelix\Webpack\Shell\Task\ReloadTask
      */
     public $ReloadResources;
+
+    public $FileInstance;
 
     /**
      * setUp method
@@ -34,8 +36,13 @@ class ReloadResourcesTaskTest extends TestCase
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->ReloadResources = $this->getMockBuilder('Webpack\Shell\Task\ReloadResourcesTask')
+        $this->ReloadResources = $this->getMockBuilder('GrandFelix\Webpack\Shell\Task\ReloadTask')
             ->setConstructorArgs([$this->io])
+            ->getMock();
+
+        $this->FileInstance = $this->getMockBuilder('Cake\Filesystem\File')
+            ->setConstructorArgs([TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php'])
+            ->setMethods(null)
             ->getMock();
     }
 
@@ -59,5 +66,19 @@ class ReloadResourcesTaskTest extends TestCase
     public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    public function testSetMainFile()
+    {
+        $this->ReloadResources->assertEquals(
+            TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php',
+            $this->ReloadResources->mainFiles[TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php'])
+            ->method('setMainFile')
+            ->with('Test')
+            ->with('testKey')
+            ->with($this->FileInstance)
+            ->with('.js');
+
+        $this->ReloadResources->runCommand(['reload']);
     }
 }
