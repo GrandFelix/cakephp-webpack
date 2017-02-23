@@ -1,8 +1,11 @@
 <?php
 namespace Webpack\Test\TestCase\Shell\Task;
 
+use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\TestSuite\TestCase;
 use GrandFelix\Webpack\Shell\Task\ReloadTask;
+use ReflectionMethod;
 
 /**
  * Webpack\Shell\Task\ReloadResourcesTask Test Case
@@ -39,11 +42,6 @@ class ReloadTaskTest extends TestCase
         $this->ReloadResources = $this->getMockBuilder('GrandFelix\Webpack\Shell\Task\ReloadTask')
             ->setConstructorArgs([$this->io])
             ->getMock();
-
-        $this->FileInstance = $this->getMockBuilder('Cake\Filesystem\File')
-            ->setConstructorArgs([TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php'])
-            ->setMethods(null)
-            ->getMock();
     }
 
     /**
@@ -66,19 +64,5 @@ class ReloadTaskTest extends TestCase
     public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    public function testSetMainFile()
-    {
-        $this->ReloadResources->assertEquals(
-            TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php',
-            $this->ReloadResources->mainFiles[TESTS . DS . 'TestCase' . DS . 'data'.DS.'test_config.php'])
-            ->method('setMainFile')
-            ->with('Test')
-            ->with('testKey')
-            ->with($this->FileInstance)
-            ->with('.js');
-
-        $this->ReloadResources->runCommand(['reload']);
     }
 }

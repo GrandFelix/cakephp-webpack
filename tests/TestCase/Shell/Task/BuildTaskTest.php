@@ -2,12 +2,12 @@
 namespace Webpack\Test\TestCase\Shell\Task;
 
 use Cake\TestSuite\TestCase;
-use Webpack\Shell\Task\BuildResourcesTask;
+use GrandFelix\Webpack\Shell\Task\BuildResourcesTask;
 
 /**
  * Webpack\Shell\Task\BuildResourcesTask Test Case
  */
-class BuildResourcesTaskTest extends TestCase
+class BuildTaskTest extends TestCase
 {
 
     /**
@@ -20,7 +20,7 @@ class BuildResourcesTaskTest extends TestCase
     /**
      * Test subject
      *
-     * @var \Webpack\Shell\Task\BuildResourcesTask
+     * @var \GrandFelix\Webpack\Shell\Task\BuildResourcesTask
      */
     public $BuildResources;
 
@@ -34,7 +34,7 @@ class BuildResourcesTaskTest extends TestCase
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->BuildResources = $this->getMockBuilder('Webpack\Shell\Task\BuildResourcesTask')
+        $this->BuildResources = $this->getMockBuilder('GrandFelix\Webpack\Shell\Task\BuildResourcesTask')
             ->setConstructorArgs([$this->io])
             ->getMock();
     }
@@ -58,6 +58,6 @@ class BuildResourcesTaskTest extends TestCase
      */
     public function testMain()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //$this->markTestIncomplete('Not implemented yet.');
     }
 }
