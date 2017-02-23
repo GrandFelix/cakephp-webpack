@@ -37,6 +37,8 @@ With npm
 npm install
 ```
 
+Install webpack globaly! yarn global add webpack or npm -g install webpack
+
 ## Usage
 
 In each of your plugin conf folder (where you want to use it) create webpack.config.php with next config:
@@ -72,6 +74,12 @@ Run next shell command:
 
 This command will create webpack.config.json in app root dir so webpack caa use it!
 
+In root of app run next command (if you installed it globaly, which is prefered!)
+
+```
+webpack --watch
+```
+
 In your view files use HtmlHelper to include generated files as you need
 
 ### Alias key
@@ -94,5 +102,4 @@ useMainJs and useMainCss option is used to specify which file is starting point 
 ## TODO
 
 - [ ] Add Component and Helper to automatically load generated files for plugin
-- [ ] Write tests
 
