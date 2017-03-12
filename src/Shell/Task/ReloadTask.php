@@ -156,8 +156,6 @@ class ReloadTask extends Shell
                 $this->setMainFile($plugin, $aliasKey, $cssFileToExclude, '-style-main');
                 unset($return[$this->removeMultipleSlashesFromPath($cssFileToExclude->path)]);
             }
-        } else {
-            throw new \Exception('For plugin ' . $plugin . ' resources option is not set! Pleas set it.');
         }
 
         return $return;
