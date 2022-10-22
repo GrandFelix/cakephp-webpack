@@ -3,9 +3,13 @@
     "description": "Webpack plugin for CakePHP",
     "authors": [{
       "name": "GrandFelix",
-      "email": "grandelix@gmail.com",
+      "email": "grandfelix@gmail.com",
       "role": "Author"
     }],
+  "keywords": [
+    "cakephp",
+    "webpack"
+  ],
     "support": {
       "issues": "https://github.com/GrandFelix/cakephp-webpack/issues",
       "source": "https://github.com/GrandFelix/cakephp-webpack"
@@ -20,13 +24,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Webpack\\": "src"
+            "GrandFelix\\Webpack\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Webpack\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "GrandFelix\\Webpack\\Test\\": "tests",
+            "GrandFelix\\Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
 }

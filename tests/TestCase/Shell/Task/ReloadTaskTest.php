@@ -1,13 +1,16 @@
 <?php
 namespace Webpack\Test\TestCase\Shell\Task;
 
+use Cake\Core\Plugin;
+use Cake\Filesystem\File;
 use Cake\TestSuite\TestCase;
-use Webpack\Shell\Task\BuildResourcesTask;
+use GrandFelix\Webpack\Shell\Task\ReloadTask;
+use ReflectionMethod;
 
 /**
- * Webpack\Shell\Task\BuildResourcesTask Test Case
+ * Webpack\Shell\Task\ReloadResourcesTask Test Case
  */
-class BuildResourcesTaskTest extends TestCase
+class ReloadTaskTest extends TestCase
 {
 
     /**
@@ -20,9 +23,11 @@ class BuildResourcesTaskTest extends TestCase
     /**
      * Test subject
      *
-     * @var \Webpack\Shell\Task\BuildResourcesTask
+     * @var \GrandFelix\Webpack\Shell\Task\ReloadTask
      */
-    public $BuildResources;
+    public $ReloadResources;
+
+    public $FileInstance;
 
     /**
      * setUp method
@@ -34,7 +39,7 @@ class BuildResourcesTaskTest extends TestCase
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->BuildResources = $this->getMockBuilder('Webpack\Shell\Task\BuildResourcesTask')
+        $this->ReloadResources = $this->getMockBuilder('GrandFelix\Webpack\Shell\Task\ReloadTask')
             ->setConstructorArgs([$this->io])
             ->getMock();
     }
@@ -46,17 +51,17 @@ class BuildResourcesTaskTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->BuildResources);
+        unset($this->ReloadResources);
 
         parent::tearDown();
     }
 
     /**
-     * Test main method
+     * Test initial setup
      *
      * @return void
      */
-    public function testMain()
+    public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

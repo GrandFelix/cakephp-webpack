@@ -38,7 +38,7 @@ class ReloadTask extends Shell
         if (!empty($mainConfig)) {
             foreach ($mainConfig as $aliasKey => $resourceConfig) {
                 $files[$this->getResourceKey(Configure::read('App.namespace'), $aliasKey)] =
-                    $this->getResourceFiles('', $resourceConfig, $aliasKey);
+                    array_values($this->getResourceFiles('', $resourceConfig, $aliasKey));
 
                 $aliasPaths[$this->getAliasKey(Configure::read('App.namespace'), $aliasKey)] =
                     $this->getAliasPath('', $resourceConfig) ?? [];
@@ -55,7 +55,7 @@ class ReloadTask extends Shell
             if ($pluginConfig !== null) {
                 foreach ($pluginConfig as $aliasKey => $resourceConfig) {
                     $files[$this->getResourceKey($plugin, $aliasKey)] =
-                        $this->getResourceFiles($plugin, $resourceConfig, $aliasKey);
+                        array_values($this->getResourceFiles($plugin, $resourceConfig, $aliasKey));
 
                     $aliasPaths[$this->getAliasKey($plugin, $aliasKey)] =
                         $this->getAliasPath($plugin, $resourceConfig) ?? 0;
@@ -115,8 +115,8 @@ class ReloadTask extends Shell
 
         if (isset($resourceConfig['resources'])) {
             $pathToResources = (string)$resourceConfig['aliasPath'] ?: 'webroot';
-            $mainJs = $resourceConfig['mainJs'] ?: false;
-            $mainCss = $resourceConfig['mainCss'] ?: false;
+            $mainJs = isset($resourceConfig['mainJs']) ? $resourceConfig['mainJs'] : false;
+            $mainCss = isset($resourceConfig['mainCss']) ? $resourceConfig['mainCss'] : false;
 
             foreach ($resourceConfig['resources'] as $resource) {
                 $folderPath = $startPath . DS . $pathToResources . DS . $resource;
@@ -124,57 +124,38 @@ class ReloadTask extends Shell
 
                 // check if is file!
                 if ($file->exists()) {
-                    // check if isset mainJs or mainCss and skip it on true and add it to main files
-                    $jsFileToExclude = $this->checkIfIsMainFile($mainJs, $plugin, $resourceConfig, $aliasKey, '.js');
-                    if ($jsFileToExclude instanceof File) {
-                        if ($this->compareFilePaths($jsFileToExclude->path, $file)) {
-                            $this->setMainFile($plugin, $aliasKey, $jsFileToExclude);
-                            continue;
-                        }
-                    }
-
-                    $cssFileToExclude = $this->checkIfIsMainFile($mainCss, $plugin, $resourceConfig, $aliasKey, '.scss');
-                    if ($cssFileToExclude instanceof File) {
-                        if ($this->compareFilePaths($cssFileToExclude->path, $file)) {
-                            $this->setMainFile($plugin, $aliasKey, $cssFileToExclude);
-                            continue;
-                        }
-                    }
-
-                    $return[] = $this->removeMultipleSlashesFromPath($file->path);
+                    $return[$this->removeMultipleSlashesFromPath($file->path)] =
+                        $this->removeMultipleSlashesFromPath($file->path);
                 } else {
                     // it looks like this is folder! Get all files from this folder, recursive!
                     $dir = new Folder($folderPath);
                     if ($dir->path !== null) {
                         $filesInPath =
                             $dir->findRecursive('.*\.(' . implode('|', Configure::read('Webpack.resources.fileExtensionsToSearch')) . ')');
+
                         if (isset($filesInPath)) {
                             foreach ($filesInPath as $file) {
-                                // check if isset mainJs or mainCss and skip it on true and add it to main files
-                                $jsFileToExclude = $this->checkIfIsMainFile($mainJs, $plugin, $resourceConfig, $aliasKey, '.js');
-                                if ($jsFileToExclude instanceof File) {
-                                    if ($this->compareFilePaths($jsFileToExclude->path, $file)) {
-                                        $this->setMainFile($plugin, $aliasKey, $jsFileToExclude);
-                                        continue;
-                                    }
-                                }
-
-                                $cssFileToExclude = $this->checkIfIsMainFile($mainCss, $plugin, $resourceConfig, $aliasKey, '.scss');
-                                if ($cssFileToExclude instanceof File) {
-                                    if ($this->compareFilePaths($cssFileToExclude->path, $file)) {
-                                        $this->setMainFile($plugin, $aliasKey, $cssFileToExclude);
-                                        continue;
-                                    }
-                                }
-
-                                $return[] = $this->removeMultipleSlashesFromPath($file);
+                                $return[$this->removeMultipleSlashesFromPath($file)] =
+                                    $this->removeMultipleSlashesFromPath($file);
                             }
                         }
                     }
                 }
             }
-        } else {
-            throw new \Exception('For plugin ' . $plugin . ' resources option is not set! Pleas set it.');
+
+            // check if isset mainJs or mainCss and skip it on true and add it to main files
+            $jsFileToExclude = $cssFileToExclude = false;
+            $jsFileToExclude = $this->checkIfIsMainFile($mainJs, $plugin, $resourceConfig, $aliasKey, '.js');
+            if ($jsFileToExclude instanceof File) {
+                $this->setMainFile($plugin, $aliasKey, $jsFileToExclude, '-main');
+                unset($return[$this->removeMultipleSlashesFromPath($jsFileToExclude->path)]);
+            }
+
+            $cssFileToExclude = $this->checkIfIsMainFile($mainCss, $plugin, $resourceConfig, $aliasKey, '.scss');
+            if ($cssFileToExclude instanceof File) {
+                $this->setMainFile($plugin, $aliasKey, $cssFileToExclude, '-style-main');
+                unset($return[$this->removeMultipleSlashesFromPath($cssFileToExclude->path)]);
+            }
         }
 
         return $return;
@@ -221,7 +202,7 @@ class ReloadTask extends Shell
      */
     private function checkIfIsMainFile($mainOption, $plugin, array $resourceConfig, $aliasKey, $extension = '.js')
     {
-        $key = $plugin . $aliasKey;
+        $key = $plugin . $aliasKey . $extension;
         if (isset($this->mainFileHandlers[$key])) {
             return $this->mainFileHandlers[$key];
         }
@@ -229,11 +210,12 @@ class ReloadTask extends Shell
         if ($mainOption === true || $mainOption != '') {
             if ($mainOption === true) {
                 // use pluginName.js to compare
-                $file = Inflector::dasherize($aliasKey . 'Main') . $extension;
+                $file = $this->getResourceKey($plugin, $aliasKey . 'Main') . $extension;
             } elseif ($mainOption != '') {
                 // user have set custom name
                 $file = $mainOption;
             }
+
             $mainFile = new File($this->getStartPath($plugin) . $resourceConfig['aliasPath'] . DS . $file);
 
             if ($mainFile->exists()) {
@@ -267,12 +249,13 @@ class ReloadTask extends Shell
      *
      * @param string $plugin plugin name
      * @param string $aliasKey alias key from resource config
+     * @param string $suffix file extension
      * @param \Cake\Filesystem\File $file file resource
      * @return void
      */
-    private function setMainFile($plugin, $aliasKey, File $file)
+    private function setMainFile($plugin, $aliasKey, File $file, $suffix = '.js')
     {
-        $key = $this->getResourceKey($plugin, $aliasKey) . '-main';
+        $key = $this->getResourceKey($plugin, $aliasKey) . str_replace('.', '-', $suffix);
 
         $this->mainFiles[$key] = $file->path;
     }
@@ -309,6 +292,10 @@ class ReloadTask extends Shell
      */
     private function getResourceKey($plugin, $aliasKey)
     {
+        if ($plugin == '') {
+            $plugin = Configure::read('App.namespace');
+        }
+
         return strtolower($plugin) . '-' . Inflector::dasherize($aliasKey);
     }
 
@@ -321,6 +308,10 @@ class ReloadTask extends Shell
      */
     private function getAliasKey($plugin, $aliasKey)
     {
+        if ($plugin == '') {
+            $plugin = Configure::read('App.namespace');
+        }
+
         return strtolower($plugin) . Inflector::camelize($aliasKey);
     }
 }

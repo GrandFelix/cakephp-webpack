@@ -2,12 +2,12 @@
 namespace Webpack\Test\TestCase\Shell\Task;
 
 use Cake\TestSuite\TestCase;
-use Webpack\Shell\Task\ReloadResourcesTask;
+use GrandFelix\Webpack\Shell\Task\BuildResourcesTask;
 
 /**
- * Webpack\Shell\Task\ReloadResourcesTask Test Case
+ * Webpack\Shell\Task\BuildResourcesTask Test Case
  */
-class ReloadResourcesTaskTest extends TestCase
+class BuildTaskTest extends TestCase
 {
 
     /**
@@ -20,9 +20,9 @@ class ReloadResourcesTaskTest extends TestCase
     /**
      * Test subject
      *
-     * @var \Webpack\Shell\Task\ReloadResourcesTask
+     * @var \GrandFelix\Webpack\Shell\Task\BuildResourcesTask
      */
-    public $ReloadResources;
+    public $BuildResources;
 
     /**
      * setUp method
@@ -34,7 +34,7 @@ class ReloadResourcesTaskTest extends TestCase
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
 
-        $this->ReloadResources = $this->getMockBuilder('Webpack\Shell\Task\ReloadResourcesTask')
+        $this->BuildResources = $this->getMockBuilder('GrandFelix\Webpack\Shell\Task\BuildResourcesTask')
             ->setConstructorArgs([$this->io])
             ->getMock();
     }
@@ -46,18 +46,18 @@ class ReloadResourcesTaskTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->ReloadResources);
+        unset($this->BuildResources);
 
         parent::tearDown();
     }
 
     /**
-     * Test initial setup
+     * Test main method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testMain()
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        //$this->markTestIncomplete('Not implemented yet.');
     }
 }
