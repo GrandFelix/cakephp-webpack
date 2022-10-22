@@ -55,9 +55,7 @@ return [
     'resources' => [ // all paths here are relative to aliasPath
       'path/to/somefile.js',
       '/', // this will take all files from aliasPath
-    ],
-    'useMainJs' => true, // you can specify own filename
-    'useMainCss' => true // you can specify own filename
+    ]
   ],
   'styles' => [ // alias key
     'aliasPath' => 'webroot/styles', // relative to plugin or main app path
@@ -79,7 +77,7 @@ Run next shell command:
 
 This command will create webpack.config.json in app root dir so webpack caa use it!
 
-In root of app run next command (if you installed it globally, which is preferred!)
+In root of app run next command for development build
 
 **--watch** option is optional
 
@@ -87,12 +85,34 @@ In root of app run next command (if you installed it globally, which is preferre
 ./bin/cake webpack build --watch
 ```
 
-**To build for production usage**
+**Production build**
 ```
 ./bin/cake webpack build --production
 ```
 
 In your view files use HtmlHelper to include generated files as you need
+
+### Clean source map files
+
+In production builds we clean up *.map files. You can disable this behavior with `Webpack.clean_before_build => false` config option in your App config (we don't recommend it!).
+
+## Config
+````php
+return [
+    'Webpack' => [
+        'resources' => [
+            'fileExtensionsToSearch' => ['js', 'scss'] // search for file extensions
+        ],
+        'clean_before_build' => true, // clean *.map files in production build
+        'clean_dirs' => [ // folders to clean up in production build 
+            WWW_ROOT . 'js/*.map',
+            WWW_ROOT . 'css/*.map',
+        ]
+    ]
+];
+````
+
+You can override those config options in your main App config.
 
 ### Alias key
 #### Alias key at compile time
@@ -106,9 +126,6 @@ import something from 'pluginNameAliasKey/path_to/some_file'
 ```
 
 instead of using full paths which is painful. Paths are relative to aliasPath from resource config.
-
-#### Alias key as starting point file when using mainJs or mainCss
-useMainJs and useMainCss option is used to specify which file is starting point for one section in config. If it's true than will be named in webroot as pluginname-aliiaskey-main.js and pluginname-aliiaskey-style-main.css. If you specify your custom name then this cusotm name will be used. File will be removed from resources array and added as own entry point. So in this file you can initialize reactjs app etc.
 
 
 ## TODO

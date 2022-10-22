@@ -7,6 +7,7 @@ use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Core\Configure;
 
 /**
  * Build command.
@@ -42,28 +43,49 @@ class BuildCommand extends Command
         $production = $args->getOption('production');
 
         if (!is_null($production)) {
-            $io->out('Creating production build.');
-            $this->production();
+            $this->production($io);
         } else {
             $commands[] = 'cd ' . ROOT;
             $commands[] = 'webpack ' . (!is_null($watch) ? '--watch' : '');
 
-            passthru(implode(' && ', $commands));
+            $output = false;
+            exec(implode(' && ', $commands), $output);
+
+            $io->out($output);
         }
     }
 
     /**
      * Build JS files for production
      *
-     * @return bool
+     * @return void
      */
-    private function production()
+    private function production(ConsoleIo $io)
     {
+        if (Configure::read('Webpack.clean_before_build')) {
+            $io->out('Cleaning folder before production build.');
+            foreach (Configure::read('Webpack.clean_dirs') as $dir) {
+                $files = glob($dir);
+                if ($files) {
+                    $io->out(sprintf('Cleaning %s', $dir));
+                    foreach ($files as $file) {
+                        $f = new \SplFileInfo($file);
+                        if ($f->isFile()) {
+                            unlink($file);
+                        }
+                    }
+                }
+            }
+        }
+
+        $io->out('Creating production build.');
+
         $commands[] = 'cd ' . ROOT;
         $commands[] = 'webpack --env=production';
 
-        passthru((implode(' && ', $commands)));
+        $output = false;
+        exec(implode(' && ', $commands), $output);
 
-        return true;
+        $io->out($output);
     }
 }
