@@ -1,36 +1,39 @@
 {
-    "name": "grandfelix/cakephp-webpack",
-    "description": "Webpack plugin for CakePHP",
-    "authors": [{
+  "name": "grandfelix/cakephp-webpack",
+  "description": "Webpack plugin for CakePHP",
+  "authors": [
+    {
       "name": "GrandFelix",
       "email": "grandfelix@gmail.com",
-      "role": "Author"
-    }],
+      "role": "Author",
+      "homepage": "https://github.com/GrandFelix/"
+    }
+  ],
   "keywords": [
     "cakephp",
     "webpack"
   ],
-    "support": {
-      "issues": "https://github.com/GrandFelix/cakephp-webpack/issues",
-      "source": "https://github.com/GrandFelix/cakephp-webpack"
-    },
-    "type": "cakephp-plugin",
-    "require": {
-        "php": ">=5.6",
-        "cakephp/cakephp": ">=3.2.9 <4.0.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "GrandFelix\\Webpack\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "GrandFelix\\Webpack\\Test\\": "tests",
-            "GrandFelix\\Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
-        }
+  "support": {
+    "issues": "https://github.com/GrandFelix/cakephp-webpack/issues",
+    "source": "https://github.com/GrandFelix/cakephp-webpack"
+  },
+  "type": "cakephp-plugin",
+  "require": {
+    "php": ">=7.4.0",
+    "cakephp/cakephp": ">=4.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "GrandFelix\\Webpack\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "GrandFelix\\Webpack\\Test\\": "tests",
+      "GrandFelix\\Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+    }
+  }
 }

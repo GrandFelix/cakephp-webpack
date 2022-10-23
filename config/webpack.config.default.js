@@ -1,5 +1,7 @@
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 let path = require('path');
+let fs = require('fs');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 let config = {};
 
 try {
@@ -9,31 +11,36 @@ try {
     return;
 }
 
-module.exports = {
-    entry: config.paths,
-    output: {
-        path: __dirname,
-        filename: "./webroot/js/[name].js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader"
-            },
-            {
-                test: /\.scss/,
-                use: ExtractTextPlugin.extract('css-loader!sass-loader')
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['.js'],
-        alias: config.aliases,
-    },
-    plugins: [
-        new ExtractTextPlugin({ filename: "webroot/css/[name].css", allChunks: false }),
-    ],
-    devtool: 'source-map'
+module.exports = (env) => {
+    return {
+        entry: config.paths,
+        output: {
+            path: __dirname + '/webroot/',
+            filename: "./js/[name].js"
+        }
+        ,
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    loader: "babel-loader"
+                },
+                {
+                    test: /\.scss/,
+                    use: [MiniCssExtractPlugin.loader, 'css-loader'],
+                }
+            ]
+        }
+        ,
+        resolve: {
+            extensions: ['.js'],
+            alias: config.aliases,
+        },
+        plugins: [
+            new MiniCssExtractPlugin({filename: "css/[name].css"}),
+        ],
+        mode: env.production ? 'production' : 'development',
+        devtool: env.production ? false : 'source-map'
+    }
 };
