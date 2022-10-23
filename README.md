@@ -128,8 +128,4 @@ import something from 'pluginNameAliasKey/path_to/some_file'
 instead of using full paths which is painful. Paths are relative to aliasPath from resource config.
 
 
-## TODO
-
-- [ ] Add Component and Helper to automatically load generated files for plugin
-
 
