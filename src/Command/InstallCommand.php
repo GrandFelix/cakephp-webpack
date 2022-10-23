@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Webpack\Command;
+namespace GrandFelix\Webpack\Command;
 
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Webpack\WebpackPlugin;
+use GrandFelix\Webpack\WebpackPlugin;
 
 /**
  * Install command.

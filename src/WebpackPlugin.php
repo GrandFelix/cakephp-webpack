@@ -1,6 +1,6 @@
 <?php
 
-namespace Webpack;
+namespace GrandFelix\Webpack;
 
 use Cake\Core\BasePlugin;
 use Cake\Core\ContainerInterface;
