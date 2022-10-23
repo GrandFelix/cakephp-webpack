@@ -163,7 +163,7 @@ class ReloadCommand extends Command
                         }
                     }
 
-                    $return[] = $this->removeMultipleSlashesFromPath($file->getRealPath());
+                    $return[] = $this->processPath($file->getRealPath());
                 } else {
                     // it looks like this is folder! Get all files from this folder, recursive!
                     /** @var \SplFileInfo[] $filesInPath */
@@ -198,7 +198,7 @@ class ReloadCommand extends Command
                                     }
                                 }
 
-                                $return[] = $this->removeMultipleSlashesFromPath($file->getRealPath());
+                                $return[] = $this->processPath($file->getRealPath());
                             }
                         }
                     }
@@ -227,8 +227,8 @@ class ReloadCommand extends Command
             $dir = new \SplFileInfo($startPath . $resourceConfig['aliasPath']);
 
             // Only add to alias path if dir exists!
-            if ($dir->getPath() !== null) {
-                $return = $dir->getPath();
+            if ($dir->getRealPath() !== null) {
+                $return = $this->processPath($dir->getRealPath());
             } else {
                 throw new \Exception("Folder does not exists!");
             }
@@ -287,7 +287,7 @@ class ReloadCommand extends Command
             $startPath = Plugin::path($plugin) . DS;
         } else {
             // it's main app
-            $startPath = APP;
+            $startPath = ROOT . DS;
         }
 
         return $startPath;
@@ -304,17 +304,18 @@ class ReloadCommand extends Command
     private function setMainFile(string $plugin, string $aliasKey, \SplFileInfo $file): void
     {
         $key = $this->getResourceKey($plugin, $aliasKey) . '-main';
-        $this->mainFiles[$key] = $file->getRealPath();
+        $this->mainFiles[$key] = $this->processPath($file->getRealPath());
     }
 
     /**
-     * Remove duplicated slashes from path
+     * Process and fix path if needed
      *
      * @param string $path path to sanitize
      * @return string sanitized path
      */
-    private function removeMultipleSlashesFromPath(string $path): string
+    private function processPath(string $path): string
     {
+        // remove repeated slashes
         return preg_replace('~/+~', DS, $path);
     }
 
@@ -327,7 +328,7 @@ class ReloadCommand extends Command
      */
     private function compareFilePaths(string $file1, string $file2): bool
     {
-        return $this->removeMultipleSlashesFromPath($file1) == $this->removeMultipleSlashesFromPath($file2);
+        return $this->processPath($file1) == $this->processPath($file2);
     }
 
     /**
