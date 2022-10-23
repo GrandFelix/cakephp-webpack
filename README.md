@@ -22,7 +22,7 @@ composer require grandfelix/cakephp-webpack
 
 Add next line to Application.php
 ```
-$this->addPlugin('Webpack', ['bootstrap' => true, 'routes' => false]);
+$this->addPlugin('GrandFelix/Webpack', ['bootstrap' => true, 'routes' => false]);
 ```
 
 **Install webpack config files**

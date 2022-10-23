@@ -7,6 +7,9 @@ use Cake\Core\ContainerInterface;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Console\CommandCollection;
 use Cake\Http\MiddlewareQueue;
+use GrandFelix\Webpack\Command\BuildCommand;
+use GrandFelix\Webpack\Command\InstallCommand;
+use GrandFelix\Webpack\Command\ReloadCommand;
 
 class WebpackPlugin extends BasePlugin
 {
@@ -22,6 +25,11 @@ class WebpackPlugin extends BasePlugin
     {
         // Add console commands here.
         $commands = parent::console($commands);
+
+        // Add entry command to handle entry point and backwards compat.
+        $commands->add('webpack install', InstallCommand::class);
+        $commands->add('webpack reload', ReloadCommand::class);
+        $commands->add('webpack build', BuildCommand::class);
 
         return $commands;
     }
